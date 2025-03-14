@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -17,30 +18,30 @@ class UserController extends Controller
     {
         $request->validate([
             "name" => "required|string|min:3",
-            "email" => "required|email|unique:users",
-            "password" => "required|string|min:6|confirmed",
+            "email"=> "required|email|unique:users",
+            "password"=> "required|string|min:6|confirmed",
         ]);
-        dd($request->all());
+        // dd($request->all());
         try {
 
             $user = User::create([
-                "name" => $request->name,
-                "email" => $request->email,
-                "password" => bcrypt($request->password)
-                //"password" => Hash::make($request->password),
+                "name"=> $request->name,
+                "email"=> $request->email,
+                "password"=> bcrypt($request->password),
+                // "password" => Hash::make($request->password),
             ]);
 
             if ($user) {
                 Auth::login($user);
-                return redirect()->route("book.index");
+                return redirect()->route("dashboard.index");
             } else {
-                throw new \Exception("Failed to create user");
+                throw new \Exception("Failed to register");
             }
+
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
             return redirect()->back()->with("error", $e->getMessage());
         }
-
     }
 
     public function signinForm()
@@ -51,30 +52,34 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            "email" => "required|email",
-            "password" => "required|string|min:6",
+            "email"=> "required|email|exists:users",
+            "password"=> "required|string|min:6",
         ]);
-        try{
-            $credentials = $request->only("email", "password");
+
+        try {
+
+            $credentials = $request->only("email","password");
     
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
-                return redirect()->route("book.index");
-            } 
+                
+                return redirect()->route("dashboard.index");
+            }
+    
             return redirect()->back()->withErrors([
-                "email" => "the provider credentials do not match our records",
+                "email"=> "The provided credentials do not match our records.",
             ])->onlyInput("email");
-
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
             return redirect()->back()->with("error", $e->getMessage());
         }
+
     }
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route("book.index");
+        return redirect()->route("sign-in-form");
     }
 }
