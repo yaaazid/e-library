@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('title')
-    Borrow | [{$book->title}]
+    Borrow | {{$book->title}}
 @endsection
 
 @section('content')
@@ -45,7 +45,8 @@
                 <p>{{ now()->addDays(7)->format('1, j F Y H:i a') }}</p>
             </div>
             <div class="text-right">
-                <form action="" method="POST">
+                <form action={{ route('borrow.request', $book->id) }} method="POST">
+                    @csrf
                     <button type="submit" class="p-4 bg-blue-500 text-white rounded-md">Proceed To Borrow</button>
                 </form>
             </div>

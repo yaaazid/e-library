@@ -17,5 +17,8 @@ class Book extends Model
         "published_year",
         "image",
     ];
-    // protected $guarded = [];
+    public function borrows()
+    {
+        return $this->hasMany(Borrow::class);
+    }
 }

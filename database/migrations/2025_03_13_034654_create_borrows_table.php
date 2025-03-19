@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('book_id')->constrained();
             $table->timestamp('returned_at')->nullable();
-            $table->enum('status', ['borrowed', 'returned', 'lost'])->default('borrowed');
+            $table->enum('status', ['pending', 'borrowed', 'returned', 'lost', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }
