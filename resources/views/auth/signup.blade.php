@@ -1,52 +1,90 @@
 @extends('layout.app')
 
 @section('title')
-SignUp
+    Sign Up
 @endsection
 
 @section('content')
-    
-<main class="p-10 mx-auto w-fit">
-    <h1 class="font-bold text-4xl text-center mb-10">Sign Up</h1>
-    
-    <form action={{route('register')}} method="POST" class="flex flex-col gap-4 max-w-full w-[640px] bg-white rounded p-6 shadow">
-        @csrf
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name" class="p-2 border" />
-        
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" class="p-2 border" />
-        
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" class="p-2 border" />
-        
-        <label for="password_confirmation">Confirm Password</label>
-        <input type="password" name="password_confirmation" id="password_confirmation" class="p-2 border" />
-        
-        <button type="submit" class="p-2 bg-blue-600 hover:bg-blue-800 text-white rounded">Continue</button>
-    </form>
-</main>
+    <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 bg-gray-800 text-white rounded-3xl shadow-2xl p-10 transform transition hover:shadow-blue-500/50">
+            
+            {{-- Header --}}
+            <div class="text-center">
+                <h2 class="text-4xl font-extrabold text-blue-400 tracking-wide">Create Account</h2>
+                <p class="mt-2 text-gray-400">Join us and explore unlimited books</p>
+            </div>
 
+            {{-- Form --}}
+            <form class="mt-8 space-y-6" action="{{ route('register') }}" method="POST">
+                @csrf
+                <div class="space-y-4">
+                    {{-- Name --}}
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-blue-300">Name</label>
+                        <input id="name" name="name" type="text" required
+                            class="w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                    </div>
+
+                    {{-- Email --}}
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-blue-300">Email address</label>
+                        <input id="email" name="email" type="email" required
+                            class="w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                    </div>
+
+                    {{-- Password --}}
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-blue-300">Password</label>
+                        <input id="password" name="password" type="password" required
+                            class="w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                    </div>
+
+                    {{-- Confirm Password --}}
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium text-blue-300">Confirm Password</label>
+                        <input id="password_confirmation" name="password_confirmation" type="password" required
+                            class="w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                    </div>
+                </div>
+
+                {{-- Submit Button --}}
+                <div class="flex justify-center">
+                    <button type="submit"
+                        class="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-md transition-transform transform hover:scale-105">
+                        Sign Up
+                    </button>
+                </div>
+            </form>
+
+            {{-- Login Redirect --}}
+            <p class="text-center text-gray-400 mt-4">
+                Already have an account? 
+                <a href="{{ route('sign-in-form') }}" class="text-blue-400 hover:underline">Sign In</a>
+            </p>
+        </div>
+    </div>
 @endsection
 
 @section('js')
-@if ($errors->any())
-@foreach ($errors->all() as $error )
-        <script>
-            Toastify({
-                text: "{{ $error }}",
-                duration: 3000,
-                close: true,
-                gravity: "top",
-                position: "right",
-                stopOnFocus: true,
-                style: {
-                    background: "red",
-                    border: "1px solid red",
-                },
-                onClick: function() {}
-            }).showToast();
-        </script>
-@endforeach
-@endif
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <script>
+                Toastify({
+                    text: "{{ $error }}",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: "red",
+                        border: "1px solid red",
+                        borderRadius: "8px",
+                        padding: "10px"
+                    },
+                    onClick: function() {}
+                }).showToast();
+            </script>
+        @endforeach
+    @endif
 @endsection

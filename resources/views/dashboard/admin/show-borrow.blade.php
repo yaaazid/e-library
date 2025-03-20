@@ -1,67 +1,63 @@
 @extends('layout.app')
 
 @section('title')
- {{ $borrow->book->title }} by {{ $borrow->user->name }}
+    {{ $borrow->book->title }} by {{ $borrow->user->name }}
 @endsection
 
 @php
 $book = $borrow->book;
 $user = $borrow->user;
-
 $borrow->returned_at = Illuminate\Support\Carbon::parse($borrow->returned_at);
 @endphp
 
 @section('content')
-<section class="p-4 flex flex-col gap-4">
-    <button type="button" class="p-2 bg-blue-800 text-white rounded-md w-fit font-medium" onclick="history.back()">
-        Back
+<section class="p-6 flex flex-col gap-6 min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-500 transition" onclick="history.back()">
+        ⬅ Back
     </button>
-    {{-- <a href="{{ route('book.index') }}" class="p-2 bg-blue-800 text-white rounded-md w-fit font-medium">Home</a> --}}
     
-    <h1 class="text-4xl font-bold text-blue-800">{{ $book->title }}</h1>
+    <h1 class="text-5xl font-extrabold text-center text-blue-400 drop-shadow-lg">{{ $book->title }}</h1>
 
-    <div class="flex flex-col gap-4 text-xl col-span-4 border border-blue-500 p-4 rounded-lg bg-blue-500/20">
+    <div class="flex flex-col gap-6 text-xl border border-blue-400 p-6 rounded-xl bg-white bg-opacity-10 backdrop-blur-lg shadow-2xl">
         <div>
-            <h2 class="font-bold text-blue-800">Name :</h2>
-            <p>{{ $user->name }}</p>
+            <h2 class="font-bold text-blue-300">👤 Name:</h2>
+            <p class="text-gray-300">{{ $user->name }}</p>
         </div>
         <div>
-            <h2 class="font-bold text-blue-800">Request Date :</h2>
-            <p>{{ $borrow->created_at->format('1,j F Y H:i') }}</p>
+            <h2 class="font-bold text-blue-300">📅 Request Date:</h2>
+            <p class="text-gray-300">{{ $borrow->created_at->format('d M Y H:i') }}</p>
         </div>
         <div>
-            <h2 class="font-bold text-blue-800">Expected Return Date :</h2>
-            <p>{{ $borrow->returned_at->format('1,j F Y H:i') }}</p>
-        </div>
-        <div>
-            <h2 class="font-bold text-blue-800">Status :</h2>
-            
+            <h2 class="font-bold text-blue-300">⏳ Expected Return Date:</h2>
+            <p class="text-gray-300">{{ $borrow->returned_at->format('d M Y H:i') }}</p>
         </div>
     </div>
 
-    <div class="grid grid-cols-7 gap-4">
-        <img src={{ asset('storage/book-images/' . $book->image) }} alt={{ $book->title }} class="col-span-3 w-full" />
+    <div class="grid grid-cols-1 md:grid-cols-7 gap-6">
+        <div class="col-span-3 flex justify-center">
+            <img src={{ asset('storage/book-images/' . $book->image) }} alt={{ $book->title }} class="rounded-xl shadow-lg w-full max-w-md border border-gray-700" />
+        </div>
 
-        <div class="flex flex-col gap-4 text-xl col-span-4 border border-yellow-500 p-4 rounded-lg bg-yellow-500/20">
+        <div class="flex flex-col gap-6 text-xl col-span-4 border border-yellow-400 p-6 rounded-xl bg-white bg-opacity-10 backdrop-blur-lg shadow-2xl">
             <div>
-                <h2 class="font-bold text-blue-800">Title :</h2>
-                <p>{{ $book->title }}</p>
+                <h2 class="font-bold text-yellow-300">📖 Title:</h2>
+                <p class="text-gray-300">{{ $book->title }}</p>
             </div>
             <div>
-                <h2 class="font-bold text-blue-800">Description :</h2>
-                <p>{{ $book->description }}</p>
+                <h2 class="font-bold text-yellow-300">📝 Description:</h2>
+                <p class="text-gray-300">{{ $book->description }}</p>
             </div>
             <div>
-                <h2 class="font-bold text-blue-800">Total Page :</h2>
-                <p>{{ $book->page_count }}</p>
+                <h2 class="font-bold text-yellow-300">📑 Total Pages:</h2>
+                <p class="text-gray-300">{{ $book->page_count }}</p>
             </div>
             <div>
-                <h2 class="font-bold text-blue-800">Author :</h2>
-                <p>{{ $book->author }}</p>
+                <h2 class="font-bold text-yellow-300">✍ Author:</h2>
+                <p class="text-gray-300">{{ $book->author }}</p>
             </div>
             <div>
-                <h2 class="font-bold text-blue-800">Published Year :</h2>
-                <p>{{ $book->published_year }}</p>
+                <h2 class="font-bold text-yellow-300">📅 Published Year:</h2>
+                <p class="text-gray-300">{{ $book->published_year }}</p>
             </div>
         </div>
     </div>

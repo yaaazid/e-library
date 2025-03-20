@@ -1,141 +1,61 @@
 @extends('layout.app')
 
-@section('title')
-    Dashboard
-@endsection
+@section('title', 'Dashboard')
 
 @section('content')
-<section class="p-4">
-    <h1>Welcome, {{auth()->user()->name}}</h1>
-    <p class="font-bold text-2xl capitalize">This is your dashboard</p>
+<section class="p-8 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900  shadow-xl text-white">
+    <div class="mb-8 text-center">
+        <h1 class="text-4xl font-extrabold text-blue-400">Welcome, {{ auth()->user()->name }}</h1>
+        <p class="text-lg text-gray-300 mt-2">This is your dashboard.</p>
+    </div>
 
-    <h2 class="font-bold text-4xl mt-6">Book List</h2>
-    <table class="p-4 border border-black w-full mt-2">
-            <thead>
-                <tr class="bg-blue-800 text-white">
-                    <th class="p-2">No</th>
-                    <th class="p-2">Title</th>
-                    <th class="p-2">Cover</th>
-                    <th class="p-2">Author</th>
-                    <th class="p-2">Year</th>
-                    <th class="p-2">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if ($books->count() === 0)
-                    <tr class="text-center p-2">
-                        <td colspan="6">
-                            No items
-                        </td>
-                    </tr>
-                @endif
-                @foreach ($books as $book)
-                    <tr class="border">
-                        <td class="text-center p-2">{{ $books->perPage() * ($books->currentPage() - 1) + $loop->index + 1 }}
-                        </td>
-                        <td class="p-2">{{ $book->title }}</td>
-                        <td class="p-2">
-                            <img src={{ asset('storage/book-images/' . $book->image) }} alt="{{ $book->title }}"
-                                class="w-24 aspect-square object-contain bg-gray-400" />
-                        </td>
-                        <td class="p-2">{{ $book->author }}</td>
-                        <td class="text-center p-2">{{ $book->published_year }}</td>
-                        <td class="p-2 flex gap-2 justify-center items-center">
-                            <a href={{ route('book.show', parameters: $book->slug) }} class="p-2 bg-green-500 text-white rounded-md">Detail</a> 
-                            
-                            @if ($book->status == 'available')
-                            <a href={{ route('dashboard.borrow', parameters: $book->slug) }} class="p-2 bg-blue-500 text-white rounded-md ">Borrow</a>
-                            @else
-                            <button type="button" disabled class="p-2 bg-slate-500 text-white rounded-md cursor-not-allowed">Borrow</button>   
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <div class="flex flex-col gap-4 justify-center items-center">
-            <p>
-                Showing {{ $books->firstItem() }} to {{ $books->lastItem() }} of {{ $books->total() }}
-            </p>
-            <div class="flex justify-center">
-                <div class="flex gap-2">
-                    {{-- Previous Button --}}
-                    @if ($books->onFirstPage())
-                        <span class="p-2 border bg-slate-200 min-w-10 text-center rounded-md cursor-not-allowed">Prev</span>
-                    @else
-                        <a href="{{ $books->previousPageUrl() }}"
-                            class="p-2 border min-w-10 hover:bg-slate-200 text-center rounded-md">
-                            Prev
-                        </a>
-                    @endif
-
-                    {{-- Button Angka2 --}}
-                    @php
-                        $currentPage = $books->currentPage();
-                        $lastPage = $books->lastPage();
-                        $maxVisiblePages = 3;
-
-                        if ($lastPage <= $maxVisiblePages) {
-                            $startPage = 1;
-                            $endPage = $lastPage;
-                        } else {
-                            if ($lastPage <= ceil($maxVisiblePages / 2)) {
-                                $startPage = 1;
-                                $endPage = $maxVisiblePages;
-                            } elseif ($currentPage >= $lastPage - floor($maxVisiblePages / 2)) {
-                                $startPage = $lastPage - $maxVisiblePages + 1;
-                                $endPage = $lastPage;
-                            } else {
-                                $startPage = $currentPage - floor($maxVisiblePages / 2);
-                                $endPage = $currentPage + floor($maxVisiblePages / 2);
-                            }
-                        }
-                    @endphp
-
-                    @if ($startPage > 1)
-                        <a href="{{ $books->url(1) }}"
-                            class="p-2 border min-w-10 hover:bg-slate-200 text-center rounded-md">
-                            1
-                        </a>
-                        @if ($startPage > 2)
-                            <span class="p-2 min-w-10 text-center">...</span>
-                        @endif
-                    @endif
-
-                    @for ($i = $startPage; $i <= $endPage; $i++)
-                        @if ($i == $currentPage)
-                            <span
-                                class="p-2 border bg-slate-200 min-w-10 text-center rounded-md cursor-not-allowed">{{ $i }}</span>
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold text-blue-300 border-b border-blue-500 pb-3">Book List</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+            @if ($books->isEmpty())
+                <p class="text-center text-gray-400 col-span-full">No items found.</p>
+            @endif
+            @foreach ($books as $book)
+                <div class="bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-2xl transition">
+                    <img src="{{ asset('storage/book-images/' . $book->image) }}" alt="{{ $book->title }}" class="w-full h-48 object-cover rounded-md border border-blue-500 shadow-md" />
+                    <h3 class="text-xl font-bold text-blue-400 mt-4">{{ $book->title }}</h3>
+                    <p class="text-gray-300">by {{ $book->author }}</p>
+                    <p class="text-gray-400 text-sm">Published: {{ $book->published_year }}</p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <a href="{{ route('book.show', $book->slug) }}" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md transition">Detail</a>
+                        @if ($book->status == 'available')
+                            <a href="{{ route('dashboard.borrow', $book->slug) }}" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-md transition">Borrow</a>
                         @else
-                            <a href="{{ $books->url($i) }}"
-                                class="p-2 border min-w-10 hover:bg-slate-200 text-center rounded-md">{{ $i }}</a>
+                            <button class="px-4 py-2 bg-gray-500 text-white rounded-lg shadow-md cursor-not-allowed">Borrowed</button>
                         @endif
-                    @endfor
-
-                    @if ($endPage < $lastPage)
-                        @if ($endPage < $lastPage - 1)
-                            <span class="p-2 min-w-10 text-center">...</span>
-                        @endif
-                        <a href="{{ $books->url($lastPage) }}"
-                            class="p-2 border min-w-10 hover:bg-slate-200 text-center rounded-md">
-                            {{$lastPage}}
-                        </a>
-                    @endif
-
-
-                    {{-- Next Button --}}
-                    @if ($books->hasMorePages())
-                        <a href="{{ $books->nextPageUrl() }}"
-                            class="p-2 border min-w-10 hover:bg-slate-200 text-center rounded-md">
-                            Next
-                        </a>
-                    @else
-                        <span class="p-2 border bg-slate-200 min-w-10 text-center rounded-md cursor-not-allowed">Next</span>
-                    @endif
+                    </div>
                 </div>
-            </div>
+            @endforeach
         </div>
+    </div>
+
+    <div class="flex flex-col items-center mt-6">
+        <p class="text-gray-400 text-sm">Showing {{ $books->firstItem() }} to {{ $books->lastItem() }} of {{ $books->total() }} results</p>
+        <div class="mt-4 flex space-x-2">
+            @if ($books->onFirstPage())
+                <span class="px-4 py-2 bg-gray-600 text-gray-400 rounded-lg">Prev</span>
+            @else
+                <a href="{{ $books->previousPageUrl() }}" class="px-4 py-2 bg-gray-700 border border-gray-500 rounded-lg hover:bg-gray-600 transition">Prev</a>
+            @endif
+            @for ($i = max(1, $books->currentPage() - 2); $i <= min($books->lastPage(), $books->currentPage() + 2); $i++)
+                @if ($i == $books->currentPage())
+                    <span class="px-4 py-2 bg-blue-500 text-white rounded-lg">{{ $i }}</span>
+                @else
+                    <a href="{{ $books->url($i) }}" class="px-4 py-2 bg-gray-700 border border-gray-500 rounded-lg hover:bg-gray-600 transition">{{ $i }}</a>
+                @endif
+            @endfor
+            @if ($books->hasMorePages())
+                <a href="{{ $books->nextPageUrl() }}" class="px-4 py-2 bg-gray-700 border border-gray-500 rounded-lg hover:bg-gray-600 transition">Next</a>
+            @else
+                <span class="px-4 py-2 bg-gray-600 text-gray-400 rounded-lg">Next</span>
+            @endif
+        </div>
+    </div>
 </section>
 @endsection
 
@@ -144,17 +64,11 @@
         <script>
             Toastify({
                 text: "{{ session('success') }}",
-                // text: "TEST",
                 duration: 3000,
                 close: true,
                 gravity: "top",
                 position: "right",
-                stopOnFocus: true,
-                style: {
-                    background: "green",
-                    border: "1px solid green",
-                },
-                onClick: function() {}
+                style: { background: "#1e40af" },
             }).showToast();
         </script>
     @endif
@@ -167,12 +81,7 @@
                     close: true,
                     gravity: "top",
                     position: "right",
-                    stopOnFocus: true,
-                    style: {
-                        background: "red",
-                        border: "1px solid red",
-                    },
-                    onClick: function() {}
+                    style: { background: "#b91c1c" },
                 }).showToast();
             </script>
         @endforeach
