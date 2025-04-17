@@ -5,15 +5,14 @@ Borrow List
 
 @section('content')
 <main class="flex flex-col gap-6 p-6 min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
-    <h1 class="text-4xl font-extrabold text-center text-cyan-400 drop-shadow-lg animate-pulse">
-        📚 Borrow List - Admin Dashboard
+    <h1 class="text-4xl font-extrabold text-center text-gray-400 drop-shadow-lg">
+        Borrow List - Admin Dashboard
     </h1>
 
-    <!-- Table Request -->
     <div class="overflow-x-auto bg-white bg-opacity-10 backdrop-blur-lg p-6 rounded-xl shadow-2xl border border-gray-700">
         <table class="w-full text-center border-collapse rounded-lg overflow-hidden">
             <thead>
-                <tr class="bg-gradient-to-r from-cyan-500 to-blue-700 text-white text-lg">
+                <tr class="bg-gradient-to-r from-gray-500 to-gray-700 text-white text-lg">
                     <th class="p-4">No</th>
                     <th class="p-4">Name</th>
                     <th class="p-4">Book Title</th>
@@ -30,7 +29,7 @@ Borrow List
                 </tr>
                 @endif
                 @foreach ($borrows as $borrow)
-                <tr class="border-b border-gray-600 hover:bg-cyan-800 transition duration-300 ease-in-out">
+                <tr class="border-b border-gray-600 transition duration-300 ease-in-out">
                     <td class="p-4 font-medium">{{ $loop->index + 1 }}</td>
                     <td class="p-4">{{ $borrow->user->name }}</td>
                     <td class="p-4">{{ $borrow->book->title }}</td>

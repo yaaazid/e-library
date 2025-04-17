@@ -1,10 +1,8 @@
-<div class="flex justify-between items-center p-6 bg-gray-900 text-white shadow-lg">
-    {{-- Logo --}}
-    <a href="/" class="font-extrabold text-3xl text-blue-400 hover:text-blue-300 transition">
-        E-Lib
+<div class="flex justify-between items-center p-6 bg-gray-500 text-white shadow-lg">
+    <a href="/" class="font-extrabold text-3xl text-white hover:text-gray-300 transition">
+        E-Libraryy
     </a>
 
-    {{-- Navigations --}}
     <nav class="flex gap-4 items-center">
         @auth
             <span class="text-gray-300">{{ auth()->user()->name }}</span>
@@ -15,10 +13,10 @@
                 </button>
             </form>
         @else
-            <a href="{{ route('sign-in-form') }}" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md transition">
+            <a href="{{ route('sign-in-form') }}" class="px-4 py-2 bg-gray-800 hover:bg-gray-600 text-white rounded-lg shadow-md transition">
                 Sign In
             </a>
-            <a href="{{ route('sign-up-form') }}" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-md transition">
+            <a href="{{ route('sign-up-form') }}" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg shadow-md transition">
                 Sign Up
             </a>
         @endauth
